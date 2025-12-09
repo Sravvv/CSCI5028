@@ -30,14 +30,12 @@
 </select>
 
 {% for coin in coins %}
-{% if coin in coin_data and coin_data[coin] %}
 <div id="{{ coin }}Section" class="coin-section" style="display: {% if loop.first %}block{% else %}none{% endif %};">
     <h2>{{ coin|title }}</h2>
-    <p>24h Change: {{ "%.2f"|format(coin_data[coin].get("percent_change", 0)) }}%</p>
-    <p>Volatility: {{ "%.2f"|format(coin_data[coin].get("volatility", 0)) }}</p>
+    <p>24h Change: {{ "%.2f"|format(coin_data[coin]["percent_change"]) }}%</p>
+    <p>Volatility: {{ "%.2f"|format(coin_data[coin]["volatility"]) }}</p>
     <canvas id="{{ coin }}Chart"></canvas>
 </div>
-{% endif %}
 {% endfor %}
 {% else %}
 <p>No coin data available. Please ensure the data collector is running.</p>

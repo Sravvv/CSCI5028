@@ -9,7 +9,7 @@ from components.analyzer import load_prices, percent_change, volatility
 from components.env import get_env
 
 app = Flask(__name__)
-
+port = int(os.environ.get("PORT", 5000))
 URL = get_env("ANALYZER_URL")
 
 @app.route("/")
@@ -45,4 +45,4 @@ def api_prices(coin):
     })
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=port)
