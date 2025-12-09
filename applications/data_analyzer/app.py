@@ -10,8 +10,8 @@ app = FastAPI(
     title="Crypto Analyzer Service",
     description="Independent service that computes crypto metrics",
     version="1.0.0",
-    request_count = 0
 )
+app.request_count = 0
 
 @app.get("/crypto-stats")
 def get_metrics(
