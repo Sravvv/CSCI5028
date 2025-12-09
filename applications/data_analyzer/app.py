@@ -9,8 +9,8 @@ import uvicorn
 from components.env import get_env
 
 
-PORT = int(get_env("ANALYZER_PORT"))
-URL = get_env("ANALYZER_URL")
+PORT = int(get_env("ANALYZER_PORT", "8001"))
+HOST = get_env("ANALYZER_HOST", "127.0.0.1")
 
 app = FastAPI(
     title="Crypto Analyzer Service",
@@ -37,4 +37,4 @@ def get_metrics(
     }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=URL, port=PORT, reload=False)
+    uvicorn.run(app, host=HOST, port=PORT, reload=False)

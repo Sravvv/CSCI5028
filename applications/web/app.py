@@ -19,7 +19,7 @@ def home():
     if not coins:
         return render_template("index.html", coins=[], coin_data={})
     
-    coin_data = {}
+    coin_data = {coin: {} for coin in coins}
     analyzer_url_base = f"{URL}/crypto-stats"
     
     for coin in coins:
