@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crypto Trend Analyzer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h1>Crypto Trend Analyzer</h1>
+{% if coins %}
+<label for="coinSelect"><strong>Select Coin:</strong></label>
+<select id="coinSelect" onchange="onCoinChange()">
+    {% for coin in coins %}
+    <option value="{{ coin }}" {% if loop.first %}selected{% endif %}>{{ coin|title }}</option>
+    {% endfor %}
+</select>
+
+{% for coin in coins %}
+<div id="{{ coin }}Section" class="coin-section" style="display: {% if loop.first %}block{% else %}none{% endif %};">
+    <h2>{{ coin|title }}</h2>
+    <p>24h Change: {{ "%.2f"|format(coin_data[coin]["percent_change"]) }}%</p>
+    <p>Volatility: {{ "%.2f"|format(coin_data[coin]["volatility"]) }}</p>
+    <canvas id="{{ coin }}Chart"></canvas>
+</div>
+{% endfor %}
+{% else %}
+<p>No coin data available. Please ensure the data collector is running.</p>
+{% endif %}
+
+<script>
+const coinData = {{ coin_data | tojson }};
+const charts = {};
+
+function renderChart(id, prices, times) {
+    return new Chart(document.getElementById(id), {
+        type: 'line',
+        data: {
+            labels: times,
+            datasets: [{
+                label: 'Price',
+                data: prices
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: { autoSkip: true, maxTicksLimit: 6 },
+                }
+            }
+        }
+    });
+}
+
+function onCoinChange() {
+    const coin = document.getElementById("coinSelect").value;
+    
+    document.querySelectorAll('.coin-section').forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    const selectedSection = document.getElementById(coin + 'Section');
+    if (selectedSection) {
+        selectedSection.style.display = 'block';
+        
+        const chartId = coin + 'Chart';
+        if (!charts[coin] && coinData[coin]) {
+            charts[coin] = renderChart(chartId, coinData[coin].prices, coinData[coin].timestamps);
+        }
+    }
+}
+
+window.onload = function() {
+    const firstCoin = document.getElementById("coinSelect")?.value;
+    if (firstCoin && coinData[firstCoin]) {
+        charts[firstCoin] = renderChart(firstCoin + 'Chart', coinData[firstCoin].prices, coinData[firstCoin].timestamps);
+    }
+};
+</script>
+
+</div>
+</body>
+</html>
