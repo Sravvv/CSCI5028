@@ -1,7 +1,13 @@
 from fastapi import FastAPI, Query
+import sys
+import os
+
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from components.analyzer import load_prices, percent_change, volatility
 import uvicorn
 from components.env import get_env
+
 
 PORT = int(get_env("ANALYZER_PORT"))
 URL = get_env("ANALYZER_URL")

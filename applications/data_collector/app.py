@@ -1,5 +1,12 @@
 import time
 import requests
+import sys
+import os
+
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+
 from components.database import get_connection
 from components.analyzer import count_recent_data
 from components.collector import fetch_current_prices, save_price, backfill
