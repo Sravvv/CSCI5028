@@ -5,7 +5,6 @@ from components.env import get_env
 
 app = Flask(__name__)
 
-PORT = int(get_env("ANALYZER_PORT"))
 URL = get_env("ANALYZER_URL")
 
 @app.route("/")
@@ -16,7 +15,7 @@ def home():
         return render_template("index.html", coins=[], coin_data={})
     
     coin_data = {}
-    analyzer_url_base = f"http://{URL}:{PORT}/crypto-stats"
+    analyzer_url_base = f"{URL}/crypto-stats"
     
     for coin in coins:
         try:
@@ -41,4 +40,4 @@ def api_prices(coin):
     })
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
